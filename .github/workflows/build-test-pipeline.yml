@@ -1,6 +1,10 @@
 name: Build and Test Pipeline
 
-on: push
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   build-and-test:
@@ -8,5 +12,9 @@ jobs:
     steps:
       - name: Check Out the Code
         uses: actions/checkout@v7
+
       - name: Run the Build Script
         run: ./scripts/build.sh
+        
+      - name: Run the Test Script
+        run: ./scripts/test.sh
