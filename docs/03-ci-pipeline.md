@@ -21,5 +21,13 @@ The build script uses `set -euo pipefail` to detect errors and stop execution wh
 
 If a step fails, GitHub Actions marks the job as failed. 
 
+## The failure the pipeline caught
+To verify that the pipeline detects errors, I removed the `.gitignore` file from the repository and pushed the change to GitHub. The pipeline failed during the build script since the script detected that `.gitignore` was missing and exited with exit code 1.
+
+GitHub Actions marked the build step as failed and skipped the test script.
+
 ## AI generated CI pipeline
 For comparison with the original workflow, I used AI (specifically ChatGPT) to generate an alternative CI pipeline. This is saved in `.github/workflows/ai-build-test-pipeline`.
+
+- **What I checked:** I compared whether the AI generated pipeline runs on push and pull_request events targeting main, use actions/checkout, and execute the same build and test scripts.
+- **Finding:** The pipeline used `bash scripts/build.sh` and `bash scripts/test.sh`, which bypasses the need for executable permissions. This means the pipeline could pass even if the scripts are not executable. The AI generated pipeline also installs the latest ShellCheck which ensures the tool is available instead of silently skipping the check.
